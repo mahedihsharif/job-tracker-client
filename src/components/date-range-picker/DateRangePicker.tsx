@@ -34,7 +34,7 @@ const DateRangePicker = ({
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {startDate ? format(startDate, "MMM dd,yyy") : "Start"}
+              {startDate ? format(new Date(startDate), "MMM dd,yyy") : "Start"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -56,7 +56,7 @@ const DateRangePicker = ({
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {endDate ? format(endDate, "MMM dd, yyyy") : "End"}
+              {endDate ? format(new Date(endDate), "MMM dd, yyyy") : "End"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
