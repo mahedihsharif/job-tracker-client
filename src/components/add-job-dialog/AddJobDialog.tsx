@@ -59,13 +59,13 @@ const AddJobDialog = ({
     lastDate: Date | undefined;
     status: string;
   }>({
-    title: updateJob?.job_title ?? "test title",
-    company: updateJob?.company_name ?? "test company",
-    minSalary: updateJob?.salary?.min?.toString() ?? "1000",
-    maxSalary: updateJob?.salary?.max?.toString() ?? "50000",
-    details: updateJob?.job_details ?? "this is test job details",
-    email: updateJob?.apply_email ?? "test@gmail.com",
-    skills: updateJob?.required_skills ?? ["test_skills"],
+    title: updateJob?.job_title ?? "",
+    company: updateJob?.company_name ?? "",
+    minSalary: updateJob?.salary?.min?.toString() ?? "",
+    maxSalary: updateJob?.salary?.max?.toString() ?? "",
+    details: updateJob?.job_details ?? "",
+    email: updateJob?.apply_email ?? "",
+    skills: updateJob?.required_skills ?? [],
     applyDate: updateJob?.apply_date
       ? new Date(updateJob.apply_date)
       : undefined,
@@ -150,7 +150,7 @@ const AddJobDialog = ({
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
-                placeholder="e.g. Senior Developer"
+                placeholder="e.g. Full Stack Developer"
                 required
               />
             </div>
@@ -162,7 +162,7 @@ const AddJobDialog = ({
                 onChange={(e) =>
                   setFormData({ ...formData, company: e.target.value })
                 }
-                placeholder="e.g. TechCorp Inc."
+                placeholder="e.g. XYZ Company Inc."
                 required
               />
             </div>
@@ -177,7 +177,7 @@ const AddJobDialog = ({
                 onChange={(e) =>
                   setFormData({ ...formData, minSalary: e.target.value })
                 }
-                placeholder="e.g. 80000"
+                placeholder="e.g. 50000"
               />
             </div>
             <div className="space-y-2">
