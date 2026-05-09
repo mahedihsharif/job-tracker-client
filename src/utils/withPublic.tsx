@@ -4,9 +4,7 @@ import { Navigate } from "react-router-dom";
 
 export const withPublic = (Component: ComponentType) => {
   return function PublicWrapper() {
-    const { data, isLoading } = useGetMeQuery(undefined, {
-      refetchOnMountOrArgChange: true,
-    });
+    const { data, isLoading } = useGetMeQuery(undefined);
 
     if (isLoading) {
       return null;
