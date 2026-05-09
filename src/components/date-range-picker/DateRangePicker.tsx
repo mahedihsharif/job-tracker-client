@@ -6,11 +6,11 @@ import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface DateRangePickerProps {
-  startDate: string | undefined;
-  endDate: string | undefined;
+  startDate?: string;
+  endDate?: string;
   onStartChange: (date: Date | undefined) => void;
   onEndChange: (date: Date | undefined) => void;
-  label: string;
+  label?: string;
 }
 
 const DateRangePicker = ({
