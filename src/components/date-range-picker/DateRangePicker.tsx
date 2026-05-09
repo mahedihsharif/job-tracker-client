@@ -40,7 +40,7 @@ const DateRangePicker = ({
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
               mode="single"
-              selected={startDate}
+              selected={startDate ? new Date(startDate) : undefined}
               onSelect={onStartChange}
             />
           </PopoverContent>
@@ -60,7 +60,11 @@ const DateRangePicker = ({
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" selected={endDate} onSelect={onEndChange} />
+            <Calendar
+              mode="single"
+              selected={endDate ? new Date(endDate) : undefined}
+              onSelect={onEndChange}
+            />
           </PopoverContent>
         </Popover>
       </div>
