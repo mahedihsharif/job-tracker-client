@@ -60,7 +60,7 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await axiosInstance.get("/auth/refresh-token");
+        await axiosInstance.post("/auth/refresh-token");
         processQueue(null);
         return axiosInstance(originalRequest);
       } catch (error) {

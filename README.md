@@ -1,73 +1,129 @@
-# React + TypeScript + Vite
+# Job Tracker — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A clean and responsive web application to manage and track job applications, built with React, TypeScript, Redux Toolkit, and Tailwind CSS.
 
-Currently, two official plugins are available:
+**Live Repo:** [github.com/mahedihsharif/job-tracker-client](https://github.com/mahedihsharif/job-tracker-client)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Backend Repo:** [github.com/mahedihsharif/job-tracker-backend](https://github.com/mahedihsharif/job-tracker-backend)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **Framework:** React 19
+- **Language:** TypeScript
+- **Build Tool:** Vite
+- **State Management:** Redux Toolkit + RTK Query
+- **Styling:** Tailwind CSS v4
+- **UI Components:** Shadcn/UI
+- **Form Handling:** React Hook Form
+- **HTTP Client:** Axios (with interceptors)
+- **Icons:** Lucide React
+- **Date Formatting:** date-fns
+- **Notifications:** Sonner
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- User registration and login with cookie-based authentication
+- Protected routes — unauthorized users redirected to login
+- Public routes — logged-in users redirected to dashboard
+- Automatic token refresh with Axios response interceptor
+- Dashboard with summary cards — Total, Applied, Pending, Shortlisted
+- Add, update, and delete job applications
+- Advanced filtering — search, status, apply date range, last date range
+- Pagination
+- Skeleton loading states
+- Toast notifications for success and error feedback
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── add-job-dialog/
+│   ├── job-filters/
+│   ├── job-table/
+│   ├── profile/
+│   ├── skeleton/
+│   ├── summary-card/
+│   └── ui/
+├── hoc/
+│   ├── withAuth.tsx
+│   └── withPublic.tsx
+├── lib/
+│   └── utils.ts
+├── pages/
+│   ├── home/
+│   ├── login/
+│   └── register/
+├── redux/
+│   ├── baseApi.ts
+│   ├── store.ts
+│   ├── hook.ts
+│   └── features/
+│       ├── auth/
+│       └── job/
+├── routes/
+│   └── router.tsx
+└── types/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+
+- Node.js >= 18
+
+### Installation
+
+```bash
+git clone https://github.com/mahedihsharif/job-tracker-client.git
+cd job-tracker-client
+npm install
 ```
+
+### Environment Variables
+
+Create a `.env` file in the root:
+
+```env
+VITE_BASE_URL=http://localhost:5000/api/v1
+```
+
+### Run
+
+```bash
+# Development
+npm run dev
+
+# Production build
+npm run build
+```
+
+---
+
+## Key Implementation Details
+
+### Axios Interceptor
+
+Handles automatic token refresh when access token expires. Uses a queue system to avoid multiple simultaneous refresh calls.
+
+### RTK Query
+
+All API calls are managed via RTK Query with automatic caching. Same endpoint called in multiple components triggers only one API request.
+
+### Protected Routes
+
+`withAuth` HOC wraps protected pages. `withPublic` HOC wraps login/register pages to redirect already logged-in users.
+
+---
+
+## Author
+
+**Mahedi H Sharif** — [github.com/mahedihsharif](https://github.com/mahedihsharif)
