@@ -30,6 +30,8 @@ const JobFilters = ({ filters, onFiltersChange }: JobFiltersProps) => {
     onFiltersChange({
       search: "",
       status: "all",
+      page: 1,
+      limit: 10,
       apply_date_start: "",
       apply_date_end: "",
       last_date_start: "",

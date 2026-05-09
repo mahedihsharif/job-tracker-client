@@ -22,8 +22,8 @@ export interface IJob {
 export interface IJobFilters {
   search?: string;
   status?: string;
-  page?: number;
-  limit?: number;
+  page: number;
+  limit: number;
   apply_date_start?: string;
   apply_date_end?: string;
   last_date_start?: string;

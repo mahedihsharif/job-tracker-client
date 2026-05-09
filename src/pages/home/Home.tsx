@@ -4,6 +4,14 @@ import JobFilters from "@/components/job-filters/JobFilters";
 import JobTable from "@/components/job-table/JobTable";
 import Profile from "@/components/profile/Profile";
 import SummaryCard from "@/components/summary-card/SummaryCard";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { globalErrorResponse } from "@/helpers/globalError";
 import {
   useCreateJobMutation,
@@ -22,8 +30,8 @@ const Home = () => {
   const [filters, setFilters] = useState<{
     search?: string;
     status?: string;
-    page?: number;
-    limit?: number;
+    page: number;
+    limit: number;
     apply_date_start?: string;
     apply_date_end?: string;
     last_date_start?: string;
@@ -59,7 +67,8 @@ const Home = () => {
         : undefined,
   });
   const [createJob] = useCreateJobMutation();
-
+  const total = data?.data?.total ?? 0;
+  const totalPages = Math.ceil(total / filters.limit);
   const filteredJobs = useMemo(() => {
     return data?.data?.jobs?.filter((job: IJob) => {
       // Search filter
@@ -203,6 +212,52 @@ const Home = () => {
           onUpdateJob={handleUpdateJob}
           onDeleteJob={handleDeleteJob}
         />
+        {/* pagination */}
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                onClick={() =>
+                  setFilters((prev) => ({ ...prev, page: prev.page - 1 }))
+                }
+                className={
+                  filters.page === 1
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (pageNum) => (
+                <PaginationItem key={pageNum}>
+                  <PaginationLink
+                    onClick={() =>
+                      setFilters((prev) => ({ ...prev, page: pageNum }))
+                    }
+                    isActive={filters.page === pageNum}
+                    className="cursor-pointer"
+                  >
+                    {pageNum}
+                  </PaginationLink>
+                </PaginationItem>
+              ),
+            )}
+
+            <PaginationItem>
+              <PaginationNext
+                onClick={() =>
+                  setFilters((prev) => ({ ...prev, page: prev.page + 1 }))
+                }
+                className={
+                  filters.page === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : "cursor-pointer"
+                }
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
