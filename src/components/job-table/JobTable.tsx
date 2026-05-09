@@ -153,26 +153,36 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="hidden items-center justify-end gap-2 sm:flex">
+                  {/* Desktop Actions */}
+                  <div className="hidden sm:flex items-center justify-end gap-2">
                     <Button
                       variant="ghost"
                       size="sm"
                       className="h-8 w-8 p-0"
-                      onClick={() => handleUpdate(job)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleUpdate(job);
+                      }}
                     >
                       <Pencil className="h-4 w-4" />
                       <span className="sr-only">Edit</span>
                     </Button>
+
                     <Button
                       variant="ghost"
                       size="sm"
                       className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => handleDelete(job)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(job);
+                      }}
                     >
                       <Trash2 className="h-4 w-4" />
                       <span className="sr-only">Delete</span>
                     </Button>
                   </div>
+
+                  {/* Mobile Actions */}
                   <div className="sm:hidden">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -180,17 +190,34 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
                           variant="ghost"
                           size="sm"
                           className="h-8 w-8 p-0"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                           <span className="sr-only">Actions</span>
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
+
+                      <DropdownMenuContent
+                        align="end"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleUpdate(job);
+                          }}
+                        >
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive focus:text-destructive">
+
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(job);
+                          }}
+                        >
                           <Trash2 className="mr-2 h-4 w-4" />
                           Delete
                         </DropdownMenuItem>
