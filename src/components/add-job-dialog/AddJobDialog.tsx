@@ -202,6 +202,7 @@ const AddJobDialog = ({
               }
               placeholder="Describe the job role and responsibilities..."
               rows={3}
+              required
             />
           </div>
           <div className="space-y-2">
@@ -214,6 +215,7 @@ const AddJobDialog = ({
                 setFormData({ ...formData, email: e.target.value })
               }
               placeholder="careers@company.com"
+              required
             />
           </div>
           <div className="space-y-2">

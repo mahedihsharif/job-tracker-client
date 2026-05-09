@@ -129,9 +129,17 @@ const Home = () => {
       await createJob(jobData).unwrap();
     } catch (error: any) {
       if (error) {
-        const err = globalErrorResponse(error);
-        if (err && typeof err.data === "object" && err.data !== null) {
-          toast.error((err.data as any).message);
+        const errors = globalErrorResponse(error);
+        if (errors && typeof errors.data === "object" && errors.data !== null) {
+          if (errors?.data?.err?.name === "ZodError") {
+            errors.data?.errorSources?.forEach((singleError) => {
+              if (singleError?.message) {
+                toast.error(singleError.message);
+              }
+            });
+          } else {
+            toast.error((errors.data as any).message);
+          }
         }
       }
     }
