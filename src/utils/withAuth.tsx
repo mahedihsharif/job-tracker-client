@@ -5,7 +5,9 @@ import { Navigate } from "react-router-dom";
 
 export const withAuth = (Component: ComponentType) => {
   return function AuthWrapper() {
-    const { data, isLoading } = useGetMeQuery(undefined);
+    const { data, isLoading } = useGetMeQuery(undefined, {
+      refetchOnMountOrArgChange: true,
+    });
 
     if (isLoading) {
       return <DashboardSkeleton />;

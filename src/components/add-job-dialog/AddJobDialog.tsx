@@ -109,7 +109,6 @@ const AddJobDialog = ({
         : "",
       status: formData.status,
     } as IJob;
-    onAddJob(jobData);
 
     if (isUpdating && updateJob && onUpdateJob) {
       onUpdateJob({ ...jobData, _id: updateJob._id });

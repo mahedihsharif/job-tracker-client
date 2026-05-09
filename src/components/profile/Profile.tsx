@@ -24,10 +24,15 @@ const Profile = () => {
     return null;
   }
   const handleLogout = async () => {
-    await logout().unwrap();
-    dispatch(baseApi.util.resetApiState()); // cache clear
-    dispatch(logout_user());
-    navigate("/login");
+    try {
+      await logout().unwrap();
+    } catch (error) {
+      console.error("Logout failed", error);
+    } finally {
+      dispatch(baseApi.util.resetApiState()); // cache clear
+      dispatch(logout_user());
+      navigate("/login", { replace: true });
+    }
   };
   return (
     <DropdownMenu>
