@@ -3,6 +3,7 @@ import AddJobDialog from "@/components/add-job-dialog/AddJobDialog";
 import JobFilters from "@/components/job-filters/JobFilters";
 import JobTable from "@/components/job-table/JobTable";
 import Profile from "@/components/profile/Profile";
+import DashboardSkeleton from "@/components/skeleton/DashboardSkeleton";
 import SummaryCard from "@/components/summary-card/SummaryCard";
 import {
   Pagination,
@@ -120,11 +121,7 @@ const Home = () => {
   }, [data?.data?.jobs, filters]);
 
   if (isLoading) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   const handleAddJob = async (jobData: IJob) => {

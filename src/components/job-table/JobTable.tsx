@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import AddJobDialog from "../add-job-dialog/AddJobDialog";
+import JobDetailsDialog from "../job-details-dialog/JobDetailsDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -59,6 +60,13 @@ const formatDate = (dateString: string) => {
 const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
   const [updatingJob, setUpdatingJob] = useState<IJob | null>(null);
   const [deletingJob, setDeletingJob] = useState<IJob | null>(null);
+  const [selectedJob, setSelectedJob] = useState<IJob | undefined>(undefined);
+  const [open, setOpen] = useState(false);
+
+  const handleRowClick = (job: IJob) => {
+    setSelectedJob(job);
+    setOpen(true);
+  };
 
   const handleUpdate = (job: IJob) => {
     setUpdatingJob(job);
@@ -125,7 +133,7 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
           </TableHeader>
           <TableBody>
             {jobs.map((job: IJob) => (
-              <TableRow key={job?._id}>
+              <TableRow key={job?._id} onClick={() => handleRowClick(job)}>
                 <TableCell className="font-medium">{job?.job_title}</TableCell>
                 <TableCell className="text-muted-foreground">
                   {job?.company_name}
@@ -234,6 +242,8 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {/* Job Details Dialog */}
+      <JobDetailsDialog job={selectedJob} open={open} setOpen={setOpen} />
     </>
   );
 };
