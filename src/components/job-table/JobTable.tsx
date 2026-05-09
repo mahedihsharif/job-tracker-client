@@ -69,8 +69,12 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
   };
 
   const confirmDelete = () => {
+    if (!deletingJob || !deletingJob._id) {
+      setDeletingJob(null);
+      return;
+    }
     if (deletingJob) {
-      onDeleteJob(deletingJob.id);
+      onDeleteJob(deletingJob._id);
       setDeletingJob(null);
     }
   };
@@ -214,8 +218,8 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
             <AlertDialogTitle>Delete Job Application</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete the application for{" "}
-              <strong>{deletingJob?.title} </strong>at{" "}
-              <strong>{deletingJob?.company}</strong>? This action can't be
+              <strong>{deletingJob?.job_title} </strong>at{" "}
+              <strong>{deletingJob?.company_name}</strong>? This action can't be
               undone
             </AlertDialogDescription>
           </AlertDialogHeader>

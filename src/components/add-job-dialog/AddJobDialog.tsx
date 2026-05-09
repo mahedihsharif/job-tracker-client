@@ -1,6 +1,5 @@
-import type { JobStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import type { IJob } from "@/types/job.types";
+import type { IJob, JobStatus } from "@/types/job.types";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import { CalendarIcon, Plus } from "lucide-react";
@@ -112,11 +111,11 @@ const AddJobDialog = ({
     } as IJob;
     onAddJob(jobData);
 
-    // if (isUpdating && updateJob && onUpdateJob) {
-    //   onUpdateJob({ ...jobData, id: updateJob.id });
-    // } else {
-    //   onAddJob(jobData);
-    // }
+    if (isUpdating && updateJob && onUpdateJob) {
+      onUpdateJob({ ...jobData, _id: updateJob._id });
+    } else {
+      onAddJob(jobData);
+    }
 
     resetForm();
     setIsOpen(false);

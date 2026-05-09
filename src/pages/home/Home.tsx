@@ -7,7 +7,9 @@ import SummaryCard from "@/components/summary-card/SummaryCard";
 import { globalErrorResponse } from "@/helpers/globalError";
 import {
   useCreateJobMutation,
+  useDeleteJobMutation,
   useGetAllJobsQuery,
+  useUpdateJobMutation,
 } from "@/redux/features/job/job.api";
 import type { IJob } from "@/types/job.types";
 import { Briefcase } from "lucide-react";
@@ -15,20 +17,22 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 const Home = () => {
+  const [updateJob] = useUpdateJobMutation();
+  const [deleteJob] = useDeleteJobMutation();
   const [filters, setFilters] = useState<{
-    search: string;
-    status: string;
-    page: number;
-    limit: number;
-    apply_date_start: string;
-    apply_date_end: string;
-    last_date_start: string;
-    last_date_end: string;
+    search?: string;
+    status?: string;
+    page?: number;
+    limit?: number;
+    apply_date_start?: string;
+    apply_date_end?: string;
+    last_date_start?: string;
+    last_date_end?: string;
   }>({
     search: "",
     status: "all",
     page: 1,
-    limit: 100,
+    limit: 10,
     apply_date_start: "",
     apply_date_end: "",
     last_date_start: "",
@@ -119,7 +123,6 @@ const Home = () => {
       await createJob(jobData).unwrap();
     } catch (error: any) {
       if (error) {
-        console.log(error.data);
         const err = globalErrorResponse(error);
         if (err && typeof err.data === "object" && err.data !== null) {
           toast.error((err.data as any).message);
@@ -128,14 +131,37 @@ const Home = () => {
     }
   };
 
-  const handleUpdateJob = (updateJobData: Job) => {
-    // setJobs((prev) =>
-    //   prev.map((job) => (job.id === updateJobData.id ? updateJobData : job)),
-    // );
+  const handleUpdateJob = async (updateJobData: IJob) => {
+    if (!updateJobData._id) {
+      toast.error("Job ID is missing");
+      return;
+    }
+    try {
+      await updateJob({
+        jobInfo: updateJobData,
+        _id: updateJobData._id,
+      }).unwrap();
+    } catch (error) {
+      if (error) {
+        const err = globalErrorResponse(error);
+        if (err && typeof err.data === "object" && err.data !== null) {
+          toast.error((err.data as any).message);
+        }
+      }
+    }
   };
 
-  const handleDeleteJob = (id: string) => {
-    // setJobs((prev) => prev.filter((job) => job.id !== id));
+  const handleDeleteJob = async (id: string) => {
+    try {
+      await deleteJob({ _id: id }).unwrap();
+    } catch (error) {
+      if (error) {
+        const err = globalErrorResponse(error);
+        if (err && typeof err.data === "object" && err.data !== null) {
+          toast.error((err.data as any).message);
+        }
+      }
+    }
   };
 
   return (
