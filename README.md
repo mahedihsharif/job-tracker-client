@@ -2,6 +2,8 @@
 
 A clean and responsive web application to manage and track job applications, built with React, TypeScript, Redux Toolkit, and Tailwind CSS.
 
+**Live Repo:** [[github.com/mahedihsharif/job-tracker-client](https://job-tracker-client-gamma.vercel.app/)]
+
 **Live Repo:** [github.com/mahedihsharif/job-tracker-client](https://github.com/mahedihsharif/job-tracker-client)
 
 **Backend Repo:** [github.com/mahedihsharif/job-tracker-backend](https://github.com/mahedihsharif/job-tracker-backend)
