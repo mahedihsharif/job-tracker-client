@@ -34,38 +34,51 @@ const JobDetailsDialog = ({ job, open, setOpen }: JobDetailsProps) => {
         {/* Job Details */}
         <div>
           <h4 className="font-semibold mb-1">Details</h4>
-          <p className="text-sm text-muted-foreground">{job?.job_details}</p>
+          <p className="text-sm text-muted-foreground overflow-y-auto max-h-60 whitespace-pre-wrap">
+            {job?.job_details}
+          </p>
         </div>
 
         {/* Dates */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h4 className="font-semibold">Apply Date</h4>
-            <p>{job?.apply_date?.split("T")[0]}</p>
+        {(job?.apply_date || job?.last_date) && (
+          <div className="grid grid-cols-2 gap-4">
+            {job?.apply_date && (
+              <div>
+                <h4 className="font-semibold">Apply Date</h4>
+                <p>{job?.apply_date?.split("T")[0]}</p>
+              </div>
+            )}
+            {job?.last_date && (
+              <div>
+                <h4 className="font-semibold">Last Date</h4>
+                <p>{job?.last_date?.split("T")[0]}</p>
+              </div>
+            )}
           </div>
-          <div>
-            <h4 className="font-semibold">Last Date</h4>
-            <p>{job?.last_date?.split("T")[0]}</p>
-          </div>
-        </div>
+        )}
 
         {/* Email */}
-        <div>
-          <h4 className="font-semibold">Apply Email</h4>
-          <p className="text-primary">{job?.apply_email}</p>
-        </div>
+        {job?.apply_email && (
+          <div>
+            <h4 className="font-semibold">Apply Email</h4>
+            <p className="text-primary">{job?.apply_email}</p>
+          </div>
+        )}
 
         {/* Skills */}
-        <div>
-          <h4 className="font-semibold mb-2">Skills</h4>
-          <div className="flex flex-wrap gap-2">
-            {job?.required_skills.map((skill, i) => (
-              <Badge key={i} variant="secondary">
-                {skill}
-              </Badge>
-            ))}
+
+        {job?.required_skills && job.required_skills.length > 0 && (
+          <div>
+            <h4 className="font-semibold mb-2">Skills</h4>
+            <div className="flex flex-wrap gap-2">
+              {job?.required_skills.map((skill, i) => (
+                <Badge key={i} variant="secondary">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Status */}
         <div>

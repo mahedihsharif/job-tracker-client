@@ -88,30 +88,30 @@ const Home = () => {
       }
 
       // Apply date range filter
-      if (filters.apply_date_start && filters.apply_date_end) {
+      const applyDateStart = filters.apply_date_start;
+      const applyDateEnd = filters.apply_date_end;
+      if (applyDateStart && applyDateEnd) {
+        if (!job.apply_date) return false;
         const applyDate = new Date(job.apply_date);
 
-        if (
-          filters.apply_date_start &&
-          applyDate < new Date(filters.apply_date_start)
-        ) {
+        if (applyDate < new Date(applyDateStart)) {
           return false;
         }
-        if (
-          filters.apply_date_end &&
-          applyDate > new Date(filters.apply_date_end)
-        ) {
+        if (applyDate > new Date(applyDateEnd)) {
           return false;
         }
       }
 
       // Last date range filter
-      if (filters.last_date_start && filters.last_date_end) {
+      const lastDateStart = filters.last_date_start;
+      const lastDateEnd = filters.last_date_end;
+      if (lastDateStart && lastDateEnd) {
+        if (!job.last_date) return false;
         const lastDate = new Date(job.last_date);
-        if (lastDate < new Date(filters.last_date_start)) {
+        if (lastDate < new Date(lastDateStart)) {
           return false;
         }
-        if (lastDate > new Date(filters.last_date_end)) {
+        if (lastDate > new Date(lastDateEnd)) {
           return false;
         }
       }
@@ -125,6 +125,7 @@ const Home = () => {
   }
 
   const handleAddJob = async (jobData: IJob) => {
+    console.log(jobData);
     try {
       await createJob(jobData).unwrap();
     } catch (error: any) {

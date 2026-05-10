@@ -142,10 +142,10 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
                   {formatSalary(job?.salary?.min, job.salary?.max)}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {formatDate(job?.apply_date)}
+                  {job.apply_date ? formatDate(job.apply_date) : "N/A"}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {formatDate(job?.last_date)}
+                  {job.last_date ? formatDate(job.last_date) : "N/A"}
                 </TableCell>
                 <TableCell>
                   <Badge variant="outline" className={statusStyles[job.status]}>

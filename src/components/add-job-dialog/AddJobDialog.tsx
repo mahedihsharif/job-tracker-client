@@ -99,14 +99,17 @@ const AddJobDialog = ({
         max: parseInt(formData.maxSalary ?? "0") || 0,
       },
       job_details: formData.details,
-      apply_email: formData.email,
-      required_skills: formData.skills,
+      apply_email: formData.email?.trim() || undefined,
+      required_skills:
+        formData.skills && formData.skills.length > 0
+          ? formData.skills
+          : undefined,
       apply_date: formData.applyDate
         ? format(formData.applyDate, "yyyy-MM-dd")
-        : "",
+        : undefined,
       last_date: formData.lastDate
         ? format(formData.lastDate, "yyyy-MM-dd")
-        : "",
+        : undefined,
       status: formData.status,
     } as IJob;
 
@@ -239,7 +242,7 @@ const AddJobDialog = ({
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {formData.applyDate
                       ? format(formData.applyDate, "MMM dd, yyyy")
-                      : "N/A"}
+                      : "Select date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -267,7 +270,7 @@ const AddJobDialog = ({
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {formData.lastDate
                       ? format(formData.lastDate, "MMM dd, yyyy")
-                      : "N/A"}
+                      : "Select date"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
