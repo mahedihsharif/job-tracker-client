@@ -69,20 +69,20 @@ const JobTable = ({
   const [deletingJob, setDeletingJob] = useState<IJob | null>(null);
   const [selectedJob, setSelectedJob] = useState<IJob | undefined>(undefined);
   const [open, setOpen] = useState(false);
-
+  // Handle row click to open job details dialog
   const handleRowClick = (job: IJob) => {
     setSelectedJob(job);
     setOpen(true);
   };
-
+  //update job
   const handleUpdate = (job: IJob) => {
     setUpdatingJob(job);
   };
-
+  //delete job
   const handleDelete = (job: IJob) => {
     setDeletingJob(job);
   };
-
+  //confirm delete
   const confirmDelete = () => {
     if (!deletingJob || !deletingJob._id) {
       setDeletingJob(null);
@@ -93,8 +93,9 @@ const JobTable = ({
       setDeletingJob(null);
     }
   };
-
+  // If no jobs, show empty state
   if (jobs.length === 0) {
+    // Show loading state if data is being fetched
     if (isFetching) {
       return (
         <div className="flex items-center justify-center rounded-xl bg-card p-12 text-center shadow-sm">

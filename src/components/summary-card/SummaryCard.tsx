@@ -8,6 +8,7 @@ interface SummaryCardsProps {
 }
 
 const SummaryCard = ({ total, counts }: SummaryCardsProps) => {
+  // Define the card data with titles, values, icons, and colors
   const cards = [
     {
       title: "Total Jobs",

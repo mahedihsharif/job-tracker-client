@@ -24,6 +24,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [login] = useLoginMutation();
 
+  // Handle form submission for user login
   const handleLogin = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError("");

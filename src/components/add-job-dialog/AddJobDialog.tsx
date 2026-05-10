@@ -87,7 +87,7 @@ const AddJobDialog = ({
       status: "pending",
     });
   };
-
+  // Handle form submission for adding/updating job
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 

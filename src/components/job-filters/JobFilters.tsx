@@ -18,14 +18,15 @@ interface JobFiltersProps {
 }
 
 const JobFilters = ({ filters, onFiltersChange }: JobFiltersProps) => {
+  // Handle search input change
   const handleSearchChange = (value: string) => {
     onFiltersChange({ ...filters, search: value });
   };
-
+  // Handle status change
   const handleStatusChange = (value: string) => {
     onFiltersChange({ ...filters, status: value as JobStatus | "all" });
   };
-
+  // Handle clear filters
   const handleClearFilters = () => {
     onFiltersChange({
       search: "",
@@ -38,7 +39,7 @@ const JobFilters = ({ filters, onFiltersChange }: JobFiltersProps) => {
       last_date_end: "",
     });
   };
-
+  // Check if any filters are active to conditionally show the "Clear Filters" button
   const hasActiveFilters =
     filters.search ||
     filters.status !== "all" ||

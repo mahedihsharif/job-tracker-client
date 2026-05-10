@@ -1,6 +1,7 @@
 import config from "@/config";
 import axios, { type AxiosRequestConfig } from "axios";
 
+// Create an Axios instance with default configuration
 export const axiosInstance = axios.create({
   baseURL: config.baseUrl,
   withCredentials: true,
@@ -15,13 +16,16 @@ export const axiosInstance = axios.create({
   },
 });
 
+// token refresh is in progress
 let isRefreshing = false;
 
+// Queue to hold pending requests while token is being refreshed
 let pendingQueue: {
   resolve: (value: unknown) => void;
   reject: (value: unknown) => void;
 }[] = [];
 
+// Function to process the pending queue after token refresh attempt
 const processQueue = (error: unknown) => {
   pendingQueue.forEach((promise) => {
     if (error) {

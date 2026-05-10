@@ -26,6 +26,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Handle form submission for user registration
   const handleRegister = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError("");
@@ -57,7 +58,7 @@ const Register = () => {
       if (errors && errors?.data !== null && typeof errors.data === "object") {
         const errorSources = (errors.data as any).errorSources;
 
-        //Zod-like validation error
+        //Zod validation error
         if (Array.isArray(errorSources) && errorSources.length > 0) {
           errorSources.forEach((singleError: any) => {
             if (singleError?.message) {

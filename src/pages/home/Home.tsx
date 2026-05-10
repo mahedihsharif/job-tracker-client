@@ -71,6 +71,7 @@ const Home = () => {
   const [createJob] = useCreateJobMutation();
   const total = data?.data?.total ?? 0;
   const totalPages = Math.ceil(total / filters.limit);
+  //filter jobs on client side based on search and date filters..
   const filteredJobs = useMemo(() => {
     return data?.data?.jobs?.filter((job: IJob) => {
       // Search filter
@@ -121,10 +122,12 @@ const Home = () => {
     });
   }, [data?.data?.jobs, filters]);
 
+  //loading state
   if (isLoading) {
     return <DashboardSkeleton />;
   }
 
+  //add new job
   const handleAddJob = async (jobData: IJob) => {
     try {
       await createJob(jobData).unwrap();
@@ -134,7 +137,7 @@ const Home = () => {
       if (errors && errors?.data !== null && typeof errors.data === "object") {
         const errorSources = (errors.data as any).errorSources;
 
-        //Zod-like validation error
+        //Zod validation error
         if (Array.isArray(errorSources) && errorSources.length > 0) {
           errorSources.forEach((singleError: any) => {
             if (singleError?.message) {
@@ -150,6 +153,7 @@ const Home = () => {
     }
   };
 
+  //update job
   const handleUpdateJob = async (updateJobData: IJob) => {
     if (!updateJobData._id) {
       toast.error("Job ID is missing");
@@ -169,7 +173,7 @@ const Home = () => {
       }
     }
   };
-
+  //delete job
   const handleDeleteJob = async (id: string) => {
     try {
       await deleteJob({ _id: id }).unwrap();

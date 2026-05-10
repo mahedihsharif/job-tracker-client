@@ -4,6 +4,7 @@ import { baseApi } from "../../baseApi";
 
 export const jobApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // Create a new job
     createJob: builder.mutation<IResponse<IJob>, IJob>({
       query: (jobInfo) => ({
         url: "/jobs/create",
@@ -12,7 +13,7 @@ export const jobApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["JOB"],
     }),
-
+    // Get all jobs with optional filters
     getAllJobs: builder.query<IResponse<IJobsResponse>, IJobFilters>({
       query: (params) => ({
         url: "/jobs",
@@ -21,7 +22,7 @@ export const jobApi = baseApi.injectEndpoints({
       }),
       providesTags: ["JOB"],
     }),
-
+    // Update a job by ID
     updateJob: builder.mutation<
       IResponse<Partial<IJob>>,
       { jobInfo: Partial<IJob>; _id: string }
@@ -33,6 +34,7 @@ export const jobApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["JOB"],
     }),
+    // Delete a job by ID
     deleteJob: builder.mutation<IResponse<string>, { _id: string }>({
       query: ({ _id }) => ({
         url: `/jobs/${_id}`,

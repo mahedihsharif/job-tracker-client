@@ -10,6 +10,7 @@ interface SkillsInputProps {
 
 const SkillsInput = ({ skills = [], onSkillsChange }: SkillsInputProps) => {
   const [inputValue, setInputValue] = useState("");
+  // Handle key down events for adding skills on Enter and removing last skill on Backspace
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim()) {
       e.preventDefault();
@@ -21,9 +22,11 @@ const SkillsInput = ({ skills = [], onSkillsChange }: SkillsInputProps) => {
       onSkillsChange(skills.slice(0, -1));
     }
   };
+  // Handle removing a specific skill when the remove button is clicked
   const removeSkill = (skillToRemove: string) => {
     onSkillsChange(skills.filter((skill) => skill !== skillToRemove));
   };
+
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap gap-2">

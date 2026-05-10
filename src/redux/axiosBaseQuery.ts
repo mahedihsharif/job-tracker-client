@@ -2,6 +2,7 @@ import { axiosInstance } from "@/lib/axios";
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import type { AxiosError, AxiosRequestConfig } from "axios";
 
+// Define a base query function using Axios for RTK Query
 const axiosBaseQuery =
   (): BaseQueryFn<
     {
