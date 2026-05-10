@@ -50,13 +50,13 @@ const AddJobDialog = ({
   const [formData, setFormData] = useState<{
     title: string;
     company: string;
-    minSalary: string | undefined;
-    maxSalary: string | undefined;
+    minSalary?: string;
+    maxSalary?: string;
     details: string;
-    email: string;
-    skills: string[];
-    applyDate: Date | undefined;
-    lastDate: Date | undefined;
+    email?: string;
+    skills?: string[];
+    applyDate?: Date;
+    lastDate?: Date;
     status: string;
   }>({
     title: updateJob?.job_title ?? "",
@@ -215,7 +215,6 @@ const AddJobDialog = ({
                 setFormData({ ...formData, email: e.target.value })
               }
               placeholder="careers@company.com"
-              required
             />
           </div>
           <div className="space-y-2">
@@ -240,7 +239,7 @@ const AddJobDialog = ({
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {formData.applyDate
                       ? format(formData.applyDate, "MMM dd, yyyy")
-                      : "Select date"}
+                      : "N/A"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -268,7 +267,7 @@ const AddJobDialog = ({
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {formData.lastDate
                       ? format(formData.lastDate, "MMM dd, yyyy")
-                      : "Select date"}
+                      : "N/A"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">

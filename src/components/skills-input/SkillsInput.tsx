@@ -4,11 +4,11 @@ import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 
 interface SkillsInputProps {
-  skills: string[];
+  skills?: string[];
   onSkillsChange: (skills: string[]) => void;
 }
 
-const SkillsInput = ({ skills, onSkillsChange }: SkillsInputProps) => {
+const SkillsInput = ({ skills = [], onSkillsChange }: SkillsInputProps) => {
   const [inputValue, setInputValue] = useState("");
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.trim()) {

@@ -12,10 +12,10 @@ export interface IJob {
   company_name: string;
   salary?: Salary;
   job_details: string;
-  apply_date: string;
-  last_date: string;
-  apply_email: string;
-  required_skills: string[];
+  apply_date?: string;
+  last_date?: string;
+  apply_email?: string;
+  required_skills?: string[];
   status: JobStatus;
 }
 
