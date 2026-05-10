@@ -2,6 +2,7 @@ import type { IJob, JobStatus } from "@/types/job.types";
 import { format } from "date-fns";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { FourSquare } from "react-loading-indicators";
 import AddJobDialog from "../add-job-dialog/AddJobDialog";
 import JobDetailsDialog from "../job-details-dialog/JobDetailsDialog";
 import {
@@ -35,6 +36,7 @@ interface JobTableProps {
   jobs: IJob[];
   onUpdateJob: (job: IJob) => void;
   onDeleteJob: (id: string) => void;
+  isFetching?: boolean;
 }
 
 const statusStyles: Record<JobStatus, string> = {
@@ -57,7 +59,12 @@ const formatDate = (dateString: string) => {
   if (!dateString) return "-";
   return format(new Date(dateString), "MMM dd, yyyy");
 };
-const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
+const JobTable = ({
+  jobs,
+  onUpdateJob,
+  onDeleteJob,
+  isFetching,
+}: JobTableProps) => {
   const [updatingJob, setUpdatingJob] = useState<IJob | null>(null);
   const [deletingJob, setDeletingJob] = useState<IJob | null>(null);
   const [selectedJob, setSelectedJob] = useState<IJob | undefined>(undefined);
@@ -88,6 +95,19 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
   };
 
   if (jobs.length === 0) {
+    if (isFetching) {
+      return (
+        <div className="flex items-center justify-center rounded-xl bg-card p-12 text-center shadow-sm">
+          <FourSquare
+            color="var(--primary)"
+            size="medium"
+            text="Loading"
+            textColor=""
+          />
+        </div>
+      );
+    }
+
     return (
       <div className="flex flex-col items-center justify-center rounded-xl bg-card p-12 text-center shadow-sm">
         <div className="mb-4 rounded-full bg-muted p-4">

@@ -47,7 +47,7 @@ const Home = () => {
     last_date_start: "",
     last_date_end: "",
   });
-  const { data, isLoading } = useGetAllJobsQuery({
+  const { data, isLoading, isFetching } = useGetAllJobsQuery({
     ...filters,
     status: filters.status === "all" ? undefined : filters.status,
     apply_date_start:
@@ -126,7 +126,6 @@ const Home = () => {
   }
 
   const handleAddJob = async (jobData: IJob) => {
-    console.log(jobData);
     try {
       await createJob(jobData).unwrap();
     } catch (error: any) {
@@ -225,6 +224,7 @@ const Home = () => {
         {/* Job Table */}
         <JobTable
           jobs={filteredJobs ?? []}
+          isFetching={isFetching}
           onUpdateJob={handleUpdateJob}
           onDeleteJob={handleDeleteJob}
         />
