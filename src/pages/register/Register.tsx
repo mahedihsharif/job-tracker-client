@@ -52,18 +52,22 @@ const Register = () => {
       toast.success(result.message);
       navigate("/login");
     } catch (error: any) {
-      if (error) {
-        const errors = globalErrorResponse(error);
-        if (errors && typeof errors.data === "object" && errors.data !== null) {
-          if (errors?.data?.err?.name === "ZodError") {
-            errors.data?.errorSources?.forEach((singleError) => {
-              if (singleError?.message) {
-                toast.error(singleError.message);
-              }
-            });
-          } else {
-            toast.error((errors.data as any).message);
-          }
+      const errors = globalErrorResponse(error);
+
+      if (errors && errors?.data !== null && typeof errors.data === "object") {
+        const errorSources = (errors.data as any).errorSources;
+
+        //Zod-like validation error
+        if (Array.isArray(errorSources) && errorSources.length > 0) {
+          errorSources.forEach((singleError: any) => {
+            if (singleError?.message) {
+              toast.error(singleError.message);
+            }
+          });
+        }
+        //Normal error
+        else {
+          toast.error((errors.data as any)?.message || "Something went wrong");
         }
       }
     }
