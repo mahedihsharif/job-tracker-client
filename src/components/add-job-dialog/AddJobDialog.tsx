@@ -206,6 +206,7 @@ const AddJobDialog = ({
               placeholder="Describe the job role and responsibilities..."
               rows={3}
               required
+              className="max-h-80 overflow-y-auto"
             />
           </div>
           <div className="space-y-2">
