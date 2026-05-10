@@ -21,6 +21,7 @@ export const jobApi = baseApi.injectEndpoints({
       }),
       providesTags: ["JOB"],
     }),
+
     updateJob: builder.mutation<
       IResponse<Partial<IJob>>,
       { jobInfo: Partial<IJob>; _id: string }

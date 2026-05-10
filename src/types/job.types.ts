@@ -29,8 +29,13 @@ export interface IJobFilters {
   last_date_start?: string;
   last_date_end?: string;
 }
-
+export interface IStatusCounts {
+  pending: number;
+  applied: number;
+  shortlisted: number;
+}
 export interface IJobsResponse {
   jobs: IJob[];
   total: number;
+  counts: IStatusCounts;
 }

@@ -67,6 +67,7 @@ const Home = () => {
         ? filters.last_date_end
         : undefined,
   });
+
   const [createJob] = useCreateJobMutation();
   const total = data?.data?.total ?? 0;
   const totalPages = Math.ceil(total / filters.limit);
@@ -210,7 +211,12 @@ const Home = () => {
         </div>
         {/* summary card */}
         <div className="mb-8">
-          <SummaryCard jobs={data?.data?.jobs ?? []} />
+          <SummaryCard
+            total={data?.data?.total ?? 0}
+            counts={
+              data?.data?.counts ?? { pending: 0, applied: 0, shortlisted: 0 }
+            }
+          />
         </div>
         {/* Filters Section*/}
         <div className="mb-6">

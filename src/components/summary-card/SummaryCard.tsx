@@ -1,44 +1,38 @@
-import type { IJob } from "@/types/job.types";
+import type { IStatusCounts } from "@/types/job.types";
 import { Briefcase, Clock, Send, Star } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 
 interface SummaryCardsProps {
-  jobs: IJob[];
+  total: number;
+  counts: IStatusCounts;
 }
 
-const SummaryCard = ({ jobs }: SummaryCardsProps) => {
-  const totalJobs = jobs.length;
-  const appliedJobs = jobs.filter((job) => job.status === "applied").length;
-  const pendingJobs = jobs.filter((job) => job.status === "pending").length;
-  const shortlistedJobs = jobs.filter(
-    (job) => job.status === "shortlisted",
-  ).length;
-
+const SummaryCard = ({ total, counts }: SummaryCardsProps) => {
   const cards = [
     {
       title: "Total Jobs",
-      value: totalJobs,
+      value: total,
       icon: Briefcase,
       color: "bg-primary/10 text-primary",
       iconColor: "text-primary",
     },
     {
       title: "Applied",
-      value: appliedJobs,
+      value: counts.applied ?? 0,
       icon: Send,
       color: "bg-chart-2/10 text-chart-2",
       iconColor: "text-chart-2",
     },
     {
       title: "Pending",
-      value: pendingJobs,
+      value: counts.pending ?? 0,
       icon: Clock,
       color: "bg-chart-3/20 text-chart-4",
       iconColor: "text-warning",
     },
     {
       title: "Shortlisted",
-      value: shortlistedJobs,
+      value: counts.shortlisted ?? 0,
       icon: Star,
       color: "bg-chart-2/10 text-chart-2",
       iconColor: "text-success",
