@@ -1,39 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { globalErrorResponse } from "@/helpers/globalError";
+import { useRegisterMutation } from "@/redux/features/auth.api";
 import { Briefcase, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface IFormInput {
-  fullName: string;
+  name: string;
   email: string;
   password: string;
 }
 
 const Register = () => {
-  // const router = useRouter();
+  const navigate = useNavigate();
+  const [register] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError("");
 
-    if (!fullName || !email || !password || !confirmPassword) {
+    if (!fullName || !email || !password) {
       setError("Please fill in all fields");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
       return;
     }
 
@@ -43,13 +41,25 @@ const Register = () => {
     }
 
     setIsLoading(true);
-
-    // Simulate registration delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // In production, this would create account via backend
-    router.push("/login");
-
+    const formData = {
+      name: fullName,
+      email: email,
+      password: password,
+    } as IFormInput;
+    try {
+      const result = await register(formData).unwrap();
+      console.log(result);
+      toast.success(result.message);
+      navigate("/login");
+    } catch (error: any) {
+      if (error) {
+        console.log(error.data.message);
+        const err = globalErrorResponse(error);
+        if (err && typeof err.data === "object" && err.data !== null) {
+          toast.error((err.data as any).message);
+        }
+      }
+    }
     setIsLoading(false);
   };
 
@@ -119,35 +129,6 @@ const Register = () => {
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <div className="relative">
-                <Input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Confirm your password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="h-11 pr-10"
-                  disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label={
-                    showConfirmPassword ? "Hide password" : "Show password"
-                  }
-                >
-                  {showConfirmPassword ? (
                     <EyeOff className="w-4 h-4" />
                   ) : (
                     <Eye className="w-4 h-4" />

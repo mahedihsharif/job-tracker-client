@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { globalErrorResponse } from "@/helpers/globalError";
+import { useLoginMutation } from "@/redux/features/auth.api";
 import { Briefcase, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface IFormInput {
   email: string;
@@ -12,13 +16,15 @@ interface IFormInput {
 }
 
 const Login = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [login] = useLoginMutation();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setError("");
 
@@ -28,13 +34,23 @@ const Login = () => {
     }
 
     setIsLoading(true);
-
-    // Simulate login delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // In production, this would validate against a backend
-    localStorage.setItem("isAuthenticated", "true");
-
+    const formData = {
+      email: email,
+      password: password,
+    } as IFormInput;
+    try {
+      const result = await login(formData).unwrap();
+      toast.success(result.message);
+      navigate("/");
+    } catch (error: any) {
+      if (error) {
+        console.log(error.data.message);
+        const err = globalErrorResponse(error);
+        if (err && typeof err.data === "object" && err.data !== null) {
+          toast.error((err.data as any).message);
+        }
+      }
+    }
     setIsLoading(false);
   };
   return (
