@@ -8,12 +8,16 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 interface DateRangePickerProps {
   startDate: Date | undefined;
   endDate: Date | undefined;
+  onStartChange: (date: Date | undefined) => void;
+  onEndChange: (date: Date | undefined) => void;
   label: string;
 }
 
 const DateRangePicker = ({
   startDate,
   endDate,
+  onStartChange,
+  onEndChange,
   label,
 }: DateRangePickerProps) => {
   return (
@@ -34,7 +38,11 @@ const DateRangePicker = ({
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" selected={startDate} />
+            <Calendar
+              mode="single"
+              selected={startDate}
+              onSelect={onStartChange}
+            />
           </PopoverContent>
         </Popover>
         <span className="text-muted-foreground">to</span>
@@ -52,7 +60,7 @@ const DateRangePicker = ({
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" selected={endDate} />
+            <Calendar mode="single" selected={endDate} onSelect={onEndChange} />
           </PopoverContent>
         </Popover>
       </div>

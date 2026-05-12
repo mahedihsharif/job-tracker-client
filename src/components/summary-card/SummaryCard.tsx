@@ -8,10 +8,10 @@ interface SummaryCardsProps {
 
 const SummaryCard = ({ jobs }: SummaryCardsProps) => {
   const totalJobs = jobs.length;
-  const appliedJobs = jobs.filter((job) => job.status === "Applied").length;
-  const pendingJobs = jobs.filter((job) => job.status === "Pending").length;
+  const appliedJobs = jobs.filter((job) => job.status === "applied").length;
+  const pendingJobs = jobs.filter((job) => job.status === "pending").length;
   const shortlistedJobs = jobs.filter(
-    (job) => job.status === "Shortlisted",
+    (job) => job.status === "shortlisted",
   ).length;
 
   const cards = [

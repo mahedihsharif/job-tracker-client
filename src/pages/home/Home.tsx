@@ -103,7 +103,7 @@ const Home = () => {
         </div>
         {/* Filters Section*/}
         <div className="mb-6">
-          <JobFilters filters={filters} />
+          <JobFilters filters={filters} onFiltersChange={setFilters} />
         </div>
         {/* Job Table */}
         <JobTable

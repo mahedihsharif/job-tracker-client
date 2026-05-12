@@ -217,8 +217,8 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Job Application</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete the application
-              <strong> {deletingJob?.title} at</strong>
+              Are you sure you want to delete the application for{" "}
+              <strong>{deletingJob?.title} </strong>at{" "}
               <strong>{deletingJob?.company}</strong>? This action can't be
               undone
             </AlertDialogDescription>
@@ -227,7 +227,7 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-destructive!  text-destructive-foreground hover:bg-destructive/90!"
             >
               Delete
             </AlertDialogAction>

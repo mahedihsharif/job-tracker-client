@@ -1,4 +1,4 @@
-import type { JobFilters as Filters } from "@/lib/types";
+import type { JobFilters as Filters, JobStatus } from "@/lib/types";
 import { Search, X } from "lucide-react";
 import DateRangePicker from "../date-range-picker/DateRangePicker";
 import { Button } from "../ui/button";
@@ -13,9 +13,29 @@ import {
 
 interface JobFiltersProps {
   filters: Filters;
+  onFiltersChange: (filters: Filters) => void;
 }
 
-const JobFilters = ({ filters }: JobFiltersProps) => {
+const JobFilters = ({ filters, onFiltersChange }: JobFiltersProps) => {
+  const handleSearchChange = (value: string) => {
+    onFiltersChange({ ...filters, search: value });
+  };
+
+  const handleStatusChange = (value: string) => {
+    onFiltersChange({ ...filters, status: value as JobStatus | "all" });
+  };
+
+  const handleClearFilters = () => {
+    onFiltersChange({
+      search: "",
+      status: "all",
+      applyDateStart: undefined,
+      applyDateEnd: undefined,
+      lastDateStart: undefined,
+      lastDateEnd: undefined,
+    });
+  };
+
   const hasActiveFilters =
     filters.search ||
     filters.status !== "all" ||
@@ -35,6 +55,7 @@ const JobFilters = ({ filters }: JobFiltersProps) => {
             <Input
               placeholder="Search by job title or company..."
               value={filters.search}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="pl-10"
             />
           </div>
@@ -43,7 +64,7 @@ const JobFilters = ({ filters }: JobFiltersProps) => {
           <label className="text-sm font-medium text-muted-foreground">
             Status
           </label>
-          <Select value={filters.status}>
+          <Select value={filters.status} onValueChange={handleStatusChange}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
@@ -62,11 +83,23 @@ const JobFilters = ({ filters }: JobFiltersProps) => {
             label="Apply Date"
             startDate={filters.applyDateStart}
             endDate={filters.applyDateEnd}
+            onStartChange={(date) =>
+              onFiltersChange({ ...filters, applyDateStart: date })
+            }
+            onEndChange={(date) =>
+              onFiltersChange({ ...filters, applyDateEnd: date })
+            }
           />
           <DateRangePicker
             label="Last Date"
             startDate={filters.lastDateStart}
             endDate={filters.lastDateEnd}
+            onStartChange={(date) =>
+              onFiltersChange({ ...filters, lastDateStart: date })
+            }
+            onEndChange={(date) =>
+              onFiltersChange({ ...filters, lastDateEnd: date })
+            }
           />
         </div>
         {hasActiveFilters && (
@@ -74,6 +107,7 @@ const JobFilters = ({ filters }: JobFiltersProps) => {
             variant="ghost"
             size="sm"
             className="text-muted-foreground hover:text-foreground"
+            onClick={handleClearFilters}
           >
             <X className="mr-2 h-4 w-4" />
             Clear Filters
