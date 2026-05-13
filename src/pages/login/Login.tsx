@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { globalErrorResponse } from "@/helpers/globalError";
-import { useLoginMutation } from "@/redux/features/auth.api";
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hook";
 import { Briefcase, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,6 +25,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [login] = useLoginMutation();
+  const dispatch = useAppDispatch();
 
   const handleLogin = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -40,6 +43,7 @@ const Login = () => {
     } as IFormInput;
     try {
       const result = await login(formData).unwrap();
+      dispatch(setUser(result.data.user));
       toast.success(result.message);
       navigate("/");
     } catch (error: any) {

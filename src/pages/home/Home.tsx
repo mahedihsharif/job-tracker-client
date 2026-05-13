@@ -1,6 +1,7 @@
 import AddJobDialog from "@/components/add-job-dialog/AddJobDialog";
 import JobFilters from "@/components/job-filters/JobFilters";
 import JobTable from "@/components/job-table/JobTable";
+import Profile from "@/components/profile/Profile";
 import SummaryCard from "@/components/summary-card/SummaryCard";
 import { sampleJobs } from "@/lib/sample-data";
 import type { JobFilters as Filters, Job } from "@/lib/types";
@@ -95,7 +96,12 @@ const Home = () => {
               </p>
             </div>
           </div>
-          <AddJobDialog onAddJob={handleAddJob} />
+          <div className="flex items-center justify-center gap-10">
+            {/* add job  */}
+            <AddJobDialog onAddJob={handleAddJob} />
+            {/* user profile */}
+            <Profile />
+          </div>
         </div>
         {/* summary card */}
         <div className="mb-8">

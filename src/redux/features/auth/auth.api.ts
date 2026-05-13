@@ -1,6 +1,11 @@
 import type { IResponse } from "@/types";
-import type { ILogin, IRegister, IUserResponse } from "@/types/auth.types";
-import { baseApi } from "../baseApi";
+import type {
+  ILogin,
+  IRegister,
+  IUser,
+  IUserResponse,
+} from "@/types/auth.types";
+import { baseApi } from "../../baseApi";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,7 +25,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["AUTH"],
     }),
+    getMe: builder.query<IResponse<IUser>, undefined>({
+      query: () => ({
+        url: "/auth/me",
+        method: "GET",
+      }),
+      providesTags: ["AUTH"],
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation } = authApi;
+export const { useRegisterMutation, useLoginMutation, useGetMeQuery } = authApi;

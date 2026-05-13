@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { globalErrorResponse } from "@/helpers/globalError";
-import { useRegisterMutation } from "@/redux/features/auth.api";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { Briefcase, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
