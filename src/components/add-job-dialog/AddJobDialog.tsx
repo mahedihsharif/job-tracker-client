@@ -1,5 +1,6 @@
-import type { Job, JobStatus } from "@/lib/types";
+import type { JobStatus } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import type { IJob } from "@/types/job.types";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import { CalendarIcon, Plus } from "lucide-react";
@@ -28,9 +29,9 @@ import {
 import { Textarea } from "../ui/textarea";
 
 interface AddJobDialogProps {
-  onAddJob: (job: Omit<Job, "id">) => void;
-  updateJob?: Job;
-  onUpdateJob?: (job: Job) => void;
+  onAddJob: (job: IJob) => void;
+  updateJob?: IJob;
+  onUpdateJob?: (job: IJob) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
@@ -50,24 +51,26 @@ const AddJobDialog = ({
   const [formData, setFormData] = useState<{
     title: string;
     company: string;
-    minSalary: string;
-    maxSalary: string;
+    minSalary: string | undefined;
+    maxSalary: string | undefined;
     details: string;
     email: string;
     skills: string[];
     applyDate: Date | undefined;
     lastDate: Date | undefined;
-    status: JobStatus;
+    status: string;
   }>({
-    title: updateJob?.title ?? "",
-    company: updateJob?.company ?? "",
-    minSalary: updateJob?.minSalary.toString() ?? "",
-    maxSalary: updateJob?.maxSalary.toString() ?? "",
-    details: updateJob?.details ?? "",
-    email: updateJob?.email ?? "",
-    skills: updateJob?.skills ?? [],
-    applyDate: updateJob?.applyDate ? new Date(updateJob.applyDate) : undefined,
-    lastDate: updateJob?.lastDate ? new Date(updateJob.lastDate) : undefined,
+    title: updateJob?.job_title ?? "test title",
+    company: updateJob?.company_name ?? "test company",
+    minSalary: updateJob?.salary?.min?.toString() ?? "1000",
+    maxSalary: updateJob?.salary?.max?.toString() ?? "50000",
+    details: updateJob?.job_details ?? "this is test job details",
+    email: updateJob?.apply_email ?? "test@gmail.com",
+    skills: updateJob?.required_skills ?? ["test_skills"],
+    applyDate: updateJob?.apply_date
+      ? new Date(updateJob.apply_date)
+      : undefined,
+    lastDate: updateJob?.last_date ? new Date(updateJob.last_date) : undefined,
     status: updateJob?.status ?? "pending",
   });
 
@@ -90,27 +93,30 @@ const AddJobDialog = ({
     e.preventDefault();
 
     const jobData = {
-      title: formData.title,
-      company: formData.company,
-      minSalary: parseInt(formData.minSalary) || 0,
-      maxSalary: parseInt(formData.maxSalary) || 0,
-      details: formData.details,
-      email: formData.email,
-      skills: formData.skills,
-      applyDate: formData.applyDate
+      job_title: formData.title,
+      company_name: formData.company,
+      salary: {
+        min: parseInt(formData.minSalary ?? "0") || 0,
+        max: parseInt(formData.maxSalary ?? "0") || 0,
+      },
+      job_details: formData.details,
+      apply_email: formData.email,
+      required_skills: formData.skills,
+      apply_date: formData.applyDate
         ? format(formData.applyDate, "yyyy-MM-dd")
         : "",
-      lastDate: formData.lastDate
+      last_date: formData.lastDate
         ? format(formData.lastDate, "yyyy-MM-dd")
         : "",
       status: formData.status,
-    };
+    } as IJob;
+    onAddJob(jobData);
 
-    if (isUpdating && updateJob && onUpdateJob) {
-      onUpdateJob({ ...jobData, id: updateJob.id });
-    } else {
-      onAddJob(jobData);
-    }
+    // if (isUpdating && updateJob && onUpdateJob) {
+    //   onUpdateJob({ ...jobData, id: updateJob.id });
+    // } else {
+    //   onAddJob(jobData);
+    // }
 
     resetForm();
     setIsOpen(false);

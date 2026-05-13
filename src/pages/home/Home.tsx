@@ -1,31 +1,70 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AddJobDialog from "@/components/add-job-dialog/AddJobDialog";
 import JobFilters from "@/components/job-filters/JobFilters";
 import JobTable from "@/components/job-table/JobTable";
 import Profile from "@/components/profile/Profile";
 import SummaryCard from "@/components/summary-card/SummaryCard";
-import { sampleJobs } from "@/lib/sample-data";
-import type { JobFilters as Filters, Job } from "@/lib/types";
+import { globalErrorResponse } from "@/helpers/globalError";
+import {
+  useCreateJobMutation,
+  useGetAllJobsQuery,
+} from "@/redux/features/job/job.api";
+import type { IJob } from "@/types/job.types";
 import { Briefcase } from "lucide-react";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 const Home = () => {
-  const [jobs, setJobs] = useState<Job[]>(sampleJobs);
-  const [filters, setFilters] = useState<Filters>({
+  const [filters, setFilters] = useState<{
+    search: string;
+    status: string;
+    page: number;
+    limit: number;
+    apply_date_start: string;
+    apply_date_end: string;
+    last_date_start: string;
+    last_date_end: string;
+  }>({
     search: "",
     status: "all",
-    applyDateStart: undefined,
-    applyDateEnd: undefined,
-    lastDateStart: undefined,
-    lastDateEnd: undefined,
+    page: 1,
+    limit: 100,
+    apply_date_start: "",
+    apply_date_end: "",
+    last_date_start: "",
+    last_date_end: "",
   });
+  const { data, isLoading } = useGetAllJobsQuery({
+    ...filters,
+    status: filters.status === "all" ? undefined : filters.status,
+    apply_date_start:
+      filters.apply_date_start && filters.apply_date_end
+        ? filters.apply_date_start
+        : undefined,
+    apply_date_end:
+      filters.apply_date_start && filters.apply_date_end
+        ? filters.apply_date_end
+        : undefined,
+    last_date_start:
+      filters.last_date_start && filters.last_date_end
+        ? filters.last_date_start
+        : undefined,
+    last_date_end:
+      filters.last_date_start && filters.last_date_end
+        ? filters.last_date_end
+        : undefined,
+  });
+  const [createJob] = useCreateJobMutation();
 
   const filteredJobs = useMemo(() => {
-    return jobs.filter((job) => {
+    return data?.data?.jobs?.filter((job: IJob) => {
       // Search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
-        const matchesTitle = job.title.toLowerCase().includes(searchLower);
-        const matchesCompany = job.company.toLowerCase().includes(searchLower);
+        const matchesTitle = job.job_title.toLowerCase().includes(searchLower);
+        const matchesCompany = job.company_name
+          .toLowerCase()
+          .includes(searchLower);
         if (!matchesTitle && !matchesCompany) return false;
       }
 
@@ -35,47 +74,68 @@ const Home = () => {
       }
 
       // Apply date range filter
-      if (filters.applyDateStart || filters.applyDateEnd) {
-        const applyDate = new Date(job.applyDate);
-        if (filters.applyDateStart && applyDate < filters.applyDateStart) {
+      if (filters.apply_date_start && filters.apply_date_end) {
+        const applyDate = new Date(job.apply_date);
+
+        if (
+          filters.apply_date_start &&
+          applyDate < new Date(filters.apply_date_start)
+        ) {
           return false;
         }
-        if (filters.applyDateEnd && applyDate > filters.applyDateEnd) {
+        if (
+          filters.apply_date_end &&
+          applyDate > new Date(filters.apply_date_end)
+        ) {
           return false;
         }
       }
 
       // Last date range filter
-      if (filters.lastDateStart || filters.lastDateEnd) {
-        const lastDate = new Date(job.lastDate);
-        if (filters.lastDateStart && lastDate < filters.lastDateStart) {
+      if (filters.last_date_start && filters.last_date_end) {
+        const lastDate = new Date(job.last_date);
+        if (lastDate < new Date(filters.last_date_start)) {
           return false;
         }
-        if (filters.lastDateEnd && lastDate > filters.lastDateEnd) {
+        if (lastDate > new Date(filters.last_date_end)) {
           return false;
         }
       }
 
       return true;
     });
-  }, [jobs, filters]);
+  }, [data?.data?.jobs, filters]);
 
-  const handleAddJob = (jobData: Omit<Job, "id">) => {
-    const newJob: Job = {
-      ...jobData,
-      id: Date.now().toString(),
-    };
-    setJobs((prev) => [newJob, ...prev]);
+  if (isLoading) {
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
+
+  const handleAddJob = async (jobData: IJob) => {
+    try {
+      await createJob(jobData).unwrap();
+    } catch (error: any) {
+      if (error) {
+        console.log(error.data);
+        const err = globalErrorResponse(error);
+        if (err && typeof err.data === "object" && err.data !== null) {
+          toast.error((err.data as any).message);
+        }
+      }
+    }
   };
 
   const handleUpdateJob = (updateJobData: Job) => {
-    setJobs((prev) =>
-      prev.map((job) => (job.id === updateJobData.id ? updateJobData : job)),
-    );
+    // setJobs((prev) =>
+    //   prev.map((job) => (job.id === updateJobData.id ? updateJobData : job)),
+    // );
   };
 
   const handleDeleteJob = (id: string) => {
-    setJobs((prev) => prev.filter((job) => job.id !== id));
+    // setJobs((prev) => prev.filter((job) => job.id !== id));
   };
 
   return (
@@ -105,7 +165,7 @@ const Home = () => {
         </div>
         {/* summary card */}
         <div className="mb-8">
-          <SummaryCard jobs={jobs} />
+          <SummaryCard jobs={data?.data?.jobs ?? []} />
         </div>
         {/* Filters Section*/}
         <div className="mb-6">
@@ -113,7 +173,7 @@ const Home = () => {
         </div>
         {/* Job Table */}
         <JobTable
-          jobs={filteredJobs}
+          jobs={filteredJobs ?? []}
           onUpdateJob={handleUpdateJob}
           onDeleteJob={handleDeleteJob}
         />

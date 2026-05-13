@@ -1,4 +1,5 @@
 import type { JobFilters as Filters, JobStatus } from "@/lib/types";
+import { format } from "date-fns";
 import { Search, X } from "lucide-react";
 import DateRangePicker from "../date-range-picker/DateRangePicker";
 import { Button } from "../ui/button";
@@ -29,20 +30,20 @@ const JobFilters = ({ filters, onFiltersChange }: JobFiltersProps) => {
     onFiltersChange({
       search: "",
       status: "all",
-      applyDateStart: undefined,
-      applyDateEnd: undefined,
-      lastDateStart: undefined,
-      lastDateEnd: undefined,
+      apply_date_start: "",
+      apply_date_end: "",
+      last_date_start: "",
+      last_date_end: "",
     });
   };
 
   const hasActiveFilters =
     filters.search ||
     filters.status !== "all" ||
-    filters.applyDateStart ||
-    filters.applyDateEnd ||
-    filters.lastDateStart ||
-    filters.lastDateEnd;
+    filters.apply_date_start ||
+    filters.apply_date_end ||
+    filters.last_date_start ||
+    filters.last_date_end;
   return (
     <div className="space-y-4 rounded-xl bg-card p-6 shadow-sm">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
@@ -81,24 +82,36 @@ const JobFilters = ({ filters, onFiltersChange }: JobFiltersProps) => {
         <div className="flex flex-col gap-4 md:flex-row">
           <DateRangePicker
             label="Apply Date"
-            startDate={filters.applyDateStart}
-            endDate={filters.applyDateEnd}
+            startDate={filters.apply_date_start}
+            endDate={filters.apply_date_end}
             onStartChange={(date) =>
-              onFiltersChange({ ...filters, applyDateStart: date })
+              onFiltersChange({
+                ...filters,
+                apply_date_start: date ? format(date, "yyyy-MM-dd") : "",
+              })
             }
             onEndChange={(date) =>
-              onFiltersChange({ ...filters, applyDateEnd: date })
+              onFiltersChange({
+                ...filters,
+                apply_date_end: date ? format(date, "yyyy-MM-dd") : "",
+              })
             }
           />
           <DateRangePicker
             label="Last Date"
-            startDate={filters.lastDateStart}
-            endDate={filters.lastDateEnd}
+            startDate={filters.last_date_start}
+            endDate={filters.last_date_end}
             onStartChange={(date) =>
-              onFiltersChange({ ...filters, lastDateStart: date })
+              onFiltersChange({
+                ...filters,
+                last_date_start: date ? format(date, "yyyy-MM-dd") : "",
+              })
             }
             onEndChange={(date) =>
-              onFiltersChange({ ...filters, lastDateEnd: date })
+              onFiltersChange({
+                ...filters,
+                last_date_end: date ? format(date, "yyyy-MM-dd") : "",
+              })
             }
           />
         </div>

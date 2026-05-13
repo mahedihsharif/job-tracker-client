@@ -1,9 +1,9 @@
-import type { Job } from "@/lib/types";
+import type { IJob } from "@/types/job.types";
 import { Briefcase, Clock, Send, Star } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 
 interface SummaryCardsProps {
-  jobs: Job[];
+  jobs: IJob[];
 }
 
 const SummaryCard = ({ jobs }: SummaryCardsProps) => {

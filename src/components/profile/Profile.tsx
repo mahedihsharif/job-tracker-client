@@ -1,12 +1,34 @@
+import { baseApi } from "@/redux/baseApi";
+import {
+  useGetMeQuery,
+  useLogoutMutation,
+} from "@/redux/features/auth/auth.api";
+import { logout_user } from "@/redux/features/auth/authSlice";
+import { useAppDispatch } from "@/redux/hook";
+import type { IUser } from "@/types/auth.types";
+import Avatar from "boring-avatars";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Avatar from "boring-avatars";
+} from "../ui/dropdown-menu";
 
 const Profile = () => {
+  const dispatch = useAppDispatch();
+  const { data, isLoading } = useGetMeQuery(undefined);
+  const [logout] = useLogoutMutation();
+  const navigate = useNavigate();
+  if (isLoading) {
+    return null;
+  }
+  const handleLogout = async () => {
+    await logout().unwrap();
+    dispatch(baseApi.util.resetApiState()); // cache clear
+    dispatch(logout_user());
+    navigate("/login");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -18,8 +40,15 @@ const Profile = () => {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem className="text-destructive">Logout</DropdownMenuItem>
+        <DropdownMenuItem>
+          {(data?.data as IUser)?.name?.trim().split(" ")?.[0] || "Profile"}
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="text-destructive"
+          onClick={() => handleLogout()}
+        >
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -1,4 +1,4 @@
-import type { Job, JobStatus } from "@/lib/types";
+import type { IJob, JobStatus } from "@/types/job.types";
 import { format } from "date-fns";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -31,8 +31,8 @@ import {
 } from "../ui/table";
 
 interface JobTableProps {
-  jobs: Job[];
-  onUpdateJob: (job: Job) => void;
+  jobs: IJob[];
+  onUpdateJob: (job: IJob) => void;
   onDeleteJob: (id: string) => void;
 }
 
@@ -48,27 +48,23 @@ const statusLabels: Record<JobStatus, string> = {
   shortlisted: "Shortlisted",
 };
 
-const formatSalary = (min: number, max: number) => {
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  });
-  return `${formatter.format(min)}-${formatter.format(max)}`;
+const formatSalary = (min?: number, max?: number) => {
+  if (!min && !max) return "N/A";
+  return `${min ?? 0} - ${max ?? 0} BDT`;
 };
 const formatDate = (dateString: string) => {
   if (!dateString) return "-";
   return format(new Date(dateString), "MMM dd, yyyy");
 };
 const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
-  const [updatingJob, setUpdatingJob] = useState<Job | null>(null);
-  const [deletingJob, setDeletingJob] = useState<Job | null>(null);
+  const [updatingJob, setUpdatingJob] = useState<IJob | null>(null);
+  const [deletingJob, setDeletingJob] = useState<IJob | null>(null);
 
-  const handleUpdate = (job: Job) => {
+  const handleUpdate = (job: IJob) => {
     setUpdatingJob(job);
   };
 
-  const handleDelete = (job: Job) => {
+  const handleDelete = (job: IJob) => {
     setDeletingJob(job);
   };
 
@@ -124,24 +120,24 @@ const JobTable = ({ jobs, onUpdateJob, onDeleteJob }: JobTableProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {jobs.map((job) => (
-              <TableRow key={job.id}>
-                <TableCell className="font-medium">{job.title}</TableCell>
+            {jobs.map((job: IJob) => (
+              <TableRow key={job?._id}>
+                <TableCell className="font-medium">{job?.job_title}</TableCell>
                 <TableCell className="text-muted-foreground">
-                  {job.company}
+                  {job?.company_name}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {formatSalary(job.minSalary, job.maxSalary)}
+                  {formatSalary(job?.salary?.min, job.salary?.max)}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {formatDate(job.applyDate)}
+                  {formatDate(job?.apply_date)}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {formatDate(job.lastDate)}
+                  {formatDate(job?.last_date)}
                 </TableCell>
                 <TableCell>
                   <Badge variant="outline" className={statusStyles[job.status]}>
-                    {statusLabels[job.status]}
+                    {statusLabels[job?.status]}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">

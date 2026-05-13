@@ -25,6 +25,13 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["AUTH"],
     }),
+    logout: builder.mutation<IResponse<null>, void>({
+      query: () => ({
+        url: "/auth/logout",
+        method: "POST",
+      }),
+      invalidatesTags: ["AUTH"],
+    }),
     getMe: builder.query<IResponse<IUser>, undefined>({
       query: () => ({
         url: "/auth/me",
@@ -35,4 +42,9 @@ export const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation, useGetMeQuery } = authApi;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useLogoutMutation,
+  useGetMeQuery,
+} = authApi;
