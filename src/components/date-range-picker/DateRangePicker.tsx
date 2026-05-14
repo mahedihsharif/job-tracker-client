@@ -6,8 +6,8 @@ import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 interface DateRangePickerProps {
-  startDate: Date | undefined;
-  endDate: Date | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
   onStartChange: (date: Date | undefined) => void;
   onEndChange: (date: Date | undefined) => void;
   label: string;

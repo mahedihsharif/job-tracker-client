@@ -1,4 +1,4 @@
-import type { JobFilters as Filters, JobStatus } from "@/lib/types";
+import type { IJobFilters, JobStatus } from "@/types/job.types";
 import { format } from "date-fns";
 import { Search, X } from "lucide-react";
 import DateRangePicker from "../date-range-picker/DateRangePicker";
@@ -13,8 +13,8 @@ import {
 } from "../ui/select";
 
 interface JobFiltersProps {
-  filters: Filters;
-  onFiltersChange: (filters: Filters) => void;
+  filters: IJobFilters;
+  onFiltersChange: (filters: IJobFilters) => void;
 }
 
 const JobFilters = ({ filters, onFiltersChange }: JobFiltersProps) => {
